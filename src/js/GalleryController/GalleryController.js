@@ -21,24 +21,24 @@ export default class GalleryController {
   }
 
   addListeners() {
-    this.wrapper.addEventListener('click', event => {
+    this.wrapper.addEventListener('click', (event) => {
       this.input.dispatchEvent(new MouseEvent('click'));
     });
 
-    this.wrapper.addEventListener('dragover', event => {
+    this.wrapper.addEventListener('dragover', (event) => {
       event.preventDefault();
-    })
+    });
 
-    this.wrapper.addEventListener('drop', event => {
+    this.wrapper.addEventListener('drop', (event) => {
       event.preventDefault();
       this.uploadFile({ target: event.dataTransfer });
-    })
+    });
 
-    this.input.addEventListener('input', event => {
+    this.input.addEventListener('input', (event) => {
       this.uploadFile(event);
-    })
+    });
 
-    document.addEventListener('click', event => {
+    document.addEventListener('click', (event) => {
       if (event.target.closest('.button')) {
         this.checkValidityURL();
       }
@@ -46,28 +46,25 @@ export default class GalleryController {
       if (event.target.closest('.remove-button')) {
         this.GalleryContainer.removeChild(event.target.closest('.container-img'));
       }
-    })
+    });
   }
 
+  uploadFile(value) {
+    const { target, type } = value;
 
+    const file = target.files && target.files[0];
 
-   uploadFile(value) {
-
-      const { target, type } = value;
-
-      const file = target.files && target.files[0];
-
-      if(!file) {
-        return;
-      }
-
-      let reader = new FileReader();
-      reader.addEventListener('load', event => {
-        let content = event.target.result;
-        new FieldImages(content, 'картинка');
-        this.input.value = '';
-      })
-
-      reader.readAsDataURL(file);
+    if (!file) {
+      return;
     }
+
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+      const content = event.target.result;
+      new FieldImages(content, 'картинка');
+      this.input.value = '';
+    });
+
+    reader.readAsDataURL(file);
+  }
 }
